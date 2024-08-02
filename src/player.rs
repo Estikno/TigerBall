@@ -1,7 +1,7 @@
 use std::ops::{Add, Sub, Mul, Div};
 
 // Definir una trait específica para los tipos permitidos
-trait Vector2Numeric: Copy + Add<Output = Self> + Sub<Output = Self> + Mul<Output = Self> + Div<Output = Self> + Into<f64> {}
+pub trait Vector2Numeric: Copy + Add<Output = Self> + Sub<Output = Self> + Mul<Output = Self> + Div<Output = Self> + Into<f64> {}
 impl Vector2Numeric for i32 {}
 impl Vector2Numeric for f32 {}
 
@@ -30,6 +30,6 @@ impl Player {
         self.position.x += self.velocity.x;
         self.position.y += self.velocity.y;
 
-        self.velocity.y += gravity;
+        self.velocity.y += *gravity;
     }
 }

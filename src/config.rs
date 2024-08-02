@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 //sdl2
 use sdl2::pixels::Color;
 
@@ -10,5 +12,7 @@ pub struct Global {
     pub resolution: Resolution,
     pub backrgound_color: Color,
     pub title: String,
-    pub gravity: f32
+    pub gravity: f32,
+    pub fps: i32,
+    pub frame_delay: Duration
 }

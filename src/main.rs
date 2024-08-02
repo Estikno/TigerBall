@@ -1,3 +1,4 @@
+use std::time::{Duration, Instant};
 use anyhow::Result;
 
 //sdl2
@@ -17,7 +18,9 @@ fn main() -> Result<()> {
         resolution: config::Resolution { width: 1024, height: 576 },
         backrgound_color: Color::RGB(94, 94, 94),
         title: String::from("Tiger Ball"),
-        gravity: -9.81
+        gravity: -0.01,
+        fps: 60,
+        frame_delay: Duration::from_millis(1000 / 60)
     };
 
     //sdl2 initialization
@@ -48,6 +51,8 @@ fn main() -> Result<()> {
     let mut event_pump = sdl_context.event_pump().unwrap();
 
     'main: loop {
+        let frame_start = Instant::now();
+
         //events part
         for event in event_pump.poll_iter() {
             match event {
@@ -60,9 +65,16 @@ fn main() -> Result<()> {
         }
 
         // Rest of the game loop goes here...
+        player.make_movement(&config.gravity);
 
         //rendering part
         renderer.render(&player);
+
+        // Control frame time
+        let frame_time = frame_start.elapsed();
+        if frame_time < config.frame_delay {
+            std::thread::sleep(config.frame_delay - frame_time);
+        }
     }
 
     Ok(())
