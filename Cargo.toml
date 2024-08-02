@@ -7,5 +7,5 @@ edition = "2021"
 anyhow = "1.0.86"
 
 [dependencies.sdl2]
-features = ["image"]
+features = ["image", "gfx"]
 version = "0.37.0"

@@ -8,13 +8,16 @@ use sdl2::keyboard::Keycode;
 //mods
 mod view;
 mod config;
+mod player;
+mod obsticles;
 
 fn main() -> Result<()> {
     //configs
     let config = config::Global {
         resolution: config::Resolution { width: 1024, height: 576 },
         backrgound_color: Color::RGB(94, 94, 94),
-        title: String::from("Tiger Ball")
+        title: String::from("Tiger Ball"),
+        gravity: -9.81
     };
 
     //sdl2 initialization
@@ -28,6 +31,19 @@ fn main() -> Result<()> {
 
     //renderer
     let mut renderer = view::Renderer::new(&config, canvas);
+
+    //player
+    let mut player = player::Player {
+        position: player::Vector2 {
+            x: 200.0,
+            y: 200.0
+        },
+        velocity: player::Vector2 {
+            x: 0.0,
+            y: 0.0
+        },
+        radius: 20
+    };
 
     let mut event_pump = sdl_context.event_pump().unwrap();
 
@@ -46,7 +62,7 @@ fn main() -> Result<()> {
         // Rest of the game loop goes here...
 
         //rendering part
-        renderer.render();
+        renderer.render(&player);
     }
 
     Ok(())

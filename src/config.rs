@@ -9,5 +9,6 @@ pub struct Resolution {
 pub struct Global {
     pub resolution: Resolution,
     pub backrgound_color: Color,
-    pub title: String
+    pub title: String,
+    pub gravity: f32
 }
