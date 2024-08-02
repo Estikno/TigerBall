@@ -18,7 +18,7 @@ fn main() -> Result<()> {
         resolution: config::Resolution { width: 1024, height: 576 },
         backrgound_color: Color::RGB(94, 94, 94),
         title: String::from("Tiger Ball"),
-        gravity: -0.01,
+        gravity: 0.5,
         fps: 60,
         frame_delay: Duration::from_millis(1000 / 60)
     };
@@ -42,8 +42,8 @@ fn main() -> Result<()> {
             y: 200.0
         },
         velocity: player::Vector2 {
-            x: 0.0,
-            y: 0.0
+            x: 10.0,
+            y: -5.0
         },
         radius: 20
     };
@@ -65,6 +65,7 @@ fn main() -> Result<()> {
         }
 
         // Rest of the game loop goes here...
+        player.check_collision(&config);
         player.make_movement(&config.gravity);
 
         //rendering part
