@@ -5,6 +5,7 @@ use anyhow::Result;
 use sdl2::pixels::Color;
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
+use sdl2::mouse::MouseButton;
 
 //mods
 mod view;
@@ -49,6 +50,8 @@ fn main() -> Result<()> {
     };
 
     let mut event_pump = sdl_context.event_pump().unwrap();
+    let mut start_mooving = false;
+    let mut mouse_start_pos: player::Vector2<i32> = player::Vector2 { x: 0, y: 0 };
 
     'main: loop {
         let frame_start = Instant::now();
@@ -60,13 +63,29 @@ fn main() -> Result<()> {
                 Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
                     break 'main
                 },
+                Event::MouseButtonDown { mouse_btn, clicks, x, y, .. } => {
+                    if mouse_btn == MouseButton::Left {
+                        mouse_start_pos = player::Vector2 { x, y };
+                    }
+                }
+                Event::MouseButtonUp { mouse_btn, clicks, x, y, .. } => {
+                    if mouse_btn == MouseButton::Left {
+                        player.velocity = player::Vector2 {
+                            x: (x - mouse_start_pos.x) as f32 * 0.2,
+                            y: (y - mouse_start_pos.y) as f32 * 0.2
+                        };
+                        start_mooving = true;
+                    }
+                }
                 _ => {}
             }
         }
 
         // Rest of the game loop goes here...
-        player.check_collision(&config);
-        player.make_movement(&config.gravity);
+        if start_mooving {
+            player.check_collision(&config);
+            player.make_movement(&config.gravity);
+        }
 
         //rendering part
         renderer.render(&player);
